@@ -1,0 +1,11 @@
+{
+  "apiVersion": 1,
+  "id": "question-patterns",
+  "name": "Question Patterns",
+  "version": "0.1.0",
+  "minAppVersion": "0.6.0",
+  "description": "Reusable, versioned question patterns with per-session teaching and practice switches.",
+  "main": "main.js",
+  "backend": "backend.cjs",
+  "styles": "styles.css"
+}
