@@ -6,20 +6,55 @@ Requires LearnHarness 0.6.0 with plugin API v1. The plugin uses LearnHarness’s
 
 ## Install
 
-Build from source with Node.js 22+:
+1. **Download the plugin.** Go to the [Releases page](https://github.com/sevenRevy/question-patterns/releases/latest) and download **`question-patterns-0.1.0.zip`** from Assets. No Node.js installation or build step is needed for the release ZIP.
+
+2. **Find your plugins folder.** In LearnHarness, open **Settings → Community plugins** and copy the plugins directory path shown there. Typical desktop locations are listed below; use the path shown in Settings if yours differs.
+
+   | System | Plugins folder |
+   | --- | --- |
+   | Windows | `%APPDATA%\LearnHarness\data\plugins` |
+   | macOS | `~/Library/Application Support/LearnHarness/data/plugins` |
+   | Linux | `~/.config/LearnHarness/data/plugins` |
+
+3. **Extract the ZIP into that folder.** You should end up with a folder named exactly **`question-patterns`** containing `dist/`:
+
+   ```text
+   plugins/
+     question-patterns/
+       dist/
+         manifest.json
+         main.js
+         backend.cjs
+         styles.css
+         README.md
+         LICENSE
+         docs/screenshots/
+   ```
+
+   If your unzip tool adds an extra layer, such as `question-patterns-0.1.0/question-patterns/`, move the inner `question-patterns` folder directly into `plugins/`. When updating, replace only `question-patterns/dist/`; keep any sibling `data/` folder.
+
+4. **Refresh the list.** Back in **Settings → Community plugins**, click **Refresh**. **Question Patterns** appears in the list, initially switched off on a fresh installation.
+
+5. **Enable it.** Turn **Question Patterns** on.
+
+6. **Restart LearnHarness.** Close the app completely and open it again.
+
+7. **Open it.** Click **Patterns Library** in the left sidebar. In teaching and practice sessions, use the sliders icon in the top bar to open **Session patterns**.
+
+### Build from source
+
+If you cloned the repository or downloaded GitHub’s **Source code** archive instead of the plugin ZIP, build it with Node.js 22+:
 
 ```sh
 npm ci
 npm run build
 ```
 
-Find your plugins directory in **Settings → Community plugins**, then install:
+Copy the resulting `dist/` folder to `<plugins-directory>/question-patterns/dist/`, then continue from step 4 above. Alternatively, install the build directly:
 
 ```sh
 npm run install:local -- "/path/to/LearnHarness/plugins"
 ```
-
-Alternatively, copy the built `dist/` folder into `<plugins-directory>/question-patterns/dist/`. Refresh Community plugins, enable Question Patterns, and restart LearnHarness to load changes to an already-loaded version.
 
 ## Workflow
 
