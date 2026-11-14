@@ -69,6 +69,33 @@ test('fresh core records persist the current seed version and three cloned, unfo
   } finally { temp.remove(); }
 });
 
+test('fresh libraries select only three starter defaults and never reset saved choices', async () => {
+  const temp = temporary();
+  let store = await Store.openPatterns(temp.directory);
+  try {
+    const starters = ['Direct Question', 'Multiple Choice', 'Open-Ended Explanation'].sort();
+    const snapshot = store.patternsSnapshot().patterns;
+    assert.equal(snapshot.length, 12, 'all core patterns are still created');
+    assert.deepEqual(snapshot.filter(pattern => pattern.enabled).map(pattern => pattern.name).sort(), starters);
+    assert.equal(store.sessionPatterns('first-session').length, 12, 'non-default cores remain selectable');
+    assert.deepEqual(store.sessionPatterns('first-session').filter(pattern => pattern.selected).map(pattern => pattern.name).sort(), starters);
+
+    const extra = snapshot.find(pattern => pattern.name === 'Fill in the Blank')!;
+    for (const pattern of snapshot) store.setPatternEnabled(pattern.id, pattern.id === extra.id);
+    store.close();
+    store = await Store.openPatterns(temp.directory);
+    assert.deepEqual(store.patternsSnapshot().patterns.filter(pattern => pattern.enabled).map(pattern => pattern.id), [extra.id], 'reopening preserves changed default switches');
+    assert.deepEqual(store.sessionPatterns('first-session').filter(pattern => pattern.selected).map(pattern => pattern.name).sort(), starters, 'existing session choices remain unchanged');
+    assert.deepEqual(store.sessionPatterns('later-session').filter(pattern => pattern.selected).map(pattern => pattern.id), [extra.id]);
+
+    store.setPatternEnabled(extra.id, false);
+    store.close();
+    store = await Store.openPatterns(temp.directory);
+    assert.equal(store.patternsSnapshot().patterns.filter(pattern => pattern.enabled).length, 0, 'turning every default off stays off');
+    assert.deepEqual(store.sessionPatterns('empty-defaults').filter(pattern => pattern.selected), []);
+  } finally { store.close(); temp.remove(); }
+});
+
 test('legacy core records upgrade once, merge user examples, and preserve unrelated state', async () => {
   const temp = temporary();
   try {

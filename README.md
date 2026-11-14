@@ -6,7 +6,7 @@ Requires LearnHarness 0.6.0 with plugin API v1. The plugin uses LearnHarness’s
 
 ## Install
 
-1. **Download the plugin.** Go to the [Releases page](https://github.com/sevenRevy/question-patterns/releases/latest) and download **`question-patterns-0.1.0.zip`** from Assets. No Node.js installation or build step is needed for the release ZIP.
+1. **Download the plugin.** Go to the [Releases page](https://github.com/sevenRevy/question-patterns/releases/latest) and download the **plugin ZIP** from Assets (`question-patterns-<version>.zip`, not the Source code archives). No Node.js installation or build step is needed for the release ZIP.
 
 2. **Find your plugins folder.** In LearnHarness, open **Settings → Community plugins** and copy the plugins directory path shown there. Typical desktop locations are listed below; use the path shown in Settings if yours differs.
 
@@ -31,7 +31,7 @@ Requires LearnHarness 0.6.0 with plugin API v1. The plugin uses LearnHarness’s
          docs/screenshots/
    ```
 
-   If your unzip tool adds an extra layer, such as `question-patterns-0.1.0/question-patterns/`, move the inner `question-patterns` folder directly into `plugins/`. When updating, replace only `question-patterns/dist/`; keep any sibling `data/` folder.
+   If your unzip tool adds an extra layer, such as `question-patterns-<version>/question-patterns/`, move the inner `question-patterns` folder directly into `plugins/`. When updating, replace only `question-patterns/dist/`; keep any sibling `data/` folder.
 
 4. **Refresh the list.** Back in **Settings → Community plugins**, click **Refresh**. **Question Patterns** appears in the list, initially switched off on a fresh installation.
 
@@ -90,7 +90,7 @@ Keep the rule, presentation format and Structure JSON reusable. Full-question ex
 
 ### 4. Customize one session
 
-Search patterns and templates together, switch selections on or off, and star favorites. These choices affect only this session; the next supported submission carries its current pattern guidance to the AI.
+Search patterns and templates together, switch selections on or off, and star favorites. These choices affect only this session; the AI receives the current guidance in its tool metadata when the next turn starts.
 
 ![Session patterns dialog with combined template and pattern rows, search, favorites, and selection switches](docs/screenshots/session-picker.png)
 
@@ -114,11 +114,11 @@ Patterns describe reusable question design, not a fixed subject or answer:
 
 The editor provides **Multiple choice**, **Free recall**, and **Any** presentation formats, editable Structure JSON, and comma-separated tags. Library search includes tags. Keep complete questions, choices, answers, and explanations in the separate example bank.
 
-The library includes twelve built-in patterns: Direct Question, Multiple Choice, Statement Combination, True / False, Matching, Ordering / Sequencing, Fill in the Blank, Scenario-Based, Error Identification, Interpretation, Problem Solving, and Open-Ended Explanation. Each starts with three original English question examples and the `Core` tag.
+The library includes twelve built-in patterns: Direct Question, Multiple Choice, Statement Combination, True / False, Matching, Ordering / Sequencing, Fill in the Blank, Scenario-Based, Error Identification, Interpretation, Problem Solving, and Open-Ended Explanation. Each starts with three original English question examples and the `Core` tag. On first setup, only **Direct Question**, **Multiple Choice**, and **Open-Ended Explanation** are selected as defaults. Changing these switches is permanent until you change them again; reopening or updating the plugin does not reset saved choices.
 
 ### Example sampling
 
-- Selected patterns normally contribute a fresh sample of **up to 3 examples** per attachment or list/set tool call.
+- Selected patterns normally contribute a fresh sample of **up to 3 examples** for each turn’s tool-metadata snapshot or explicit list/set tool call.
 - **Example limit per call** sets a pattern’s limit. Blank uses 3; zero disables random examples.
 - **Settings → Community plugins → Question Patterns → Overall example limit** defaults to **15**, shared across non-exempt selections.
 - **Force inclusion** always includes an example, even above either limit. These are example-count limits, not token budgets.
@@ -137,9 +137,9 @@ Stars save favorites independently of selection. Use **Favorites** to filter the
 
 ### Automatic AI guidance
 
-The next supported message or answer submission carries the current selected definitions and sampled examples to the AI. An empty snapshot clears older pattern guidance. Switching patterns alone does not start a model request or change a response already being generated.
+At the start of each Teacher or Practice AI turn, the plugin includes the current selected definitions and sampled examples in the `question_patterns_list` tool description. The AI can use this snapshot without a separate list call. Guidance consumes model context but is not appended to your messages, answers, or thinking text. The initial diagnostic prober is not extended.
 
-Attachments are submitted reference content, not hidden system context, and may appear in the transcript. They use message content or an available, ungraded thinking channel; graded answers and structured submissions are not changed. If no permitted channel exists, or LearnHarness continues without a new submission, the AI is instructed to call `question_patterns_list` before composing questions instead. The initial diagnostic prober is not extended.
+The current turn’s snapshot replaces older guidance; an empty list clears the selection. Switching patterns alone does not start a model request or change a response already being generated. Changes appear automatically on the next turn. If you change selections during an active turn and ask the AI to use them immediately, it can call `question_patterns_list` for a fresh read. Later successful default-list/set results override the turn-start snapshot; a names-only discovery catalog does not.
 
 You can also ask the AI to change selections, such as “Enable Multiple Choice for this session.” `question_patterns_list` returns selected definitions; `question_patterns_list({"available":true})` lists available names and selection states for explicit discovery requests. `question_patterns_set` changes one session selection.
 

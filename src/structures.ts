@@ -5,9 +5,9 @@ import { CORE_EXAMPLES } from './core-examples';
 export const CORE_SEED_VERSION = 3;
 
 /** Presentation, structure and reasoning stay independent; examples illustrate, not constrain, topics. */
-export const CORE_PATTERNS: Array<{ id: string; content: PatternContent; examples: PatternExample[] }> = [
+export const CORE_PATTERNS: Array<{ id: string; content: PatternContent; examples: PatternExample[]; defaultSelected?: boolean }> = [
   {
-    id: '00000000-0000-4000-8000-000000000001', examples: CORE_EXAMPLES[1]!,
+    id: '00000000-0000-4000-8000-000000000001', examples: CORE_EXAMPLES[1]!, defaultSelected: true,
     content: {
       name: 'Direct Question', format: 'any',
       structure: { question_count: 1, stimulus: 'include necessary context', response_scope: 'state the expected answer scope' },
@@ -16,7 +16,7 @@ export const CORE_PATTERNS: Array<{ id: string; content: PatternContent; example
     },
   },
   {
-    id: '00000000-0000-4000-8000-000000000002', examples: CORE_EXAMPLES[2]!,
+    id: '00000000-0000-4000-8000-000000000002', examples: CORE_EXAMPLES[2]!, defaultSelected: true,
     content: {
       name: 'Multiple Choice', format: 'multiple_choice',
       structure: { stem: 'complete, clearly stated problem', option_count: 'variable', best_answer_count: 1, distractors: 'plausible, distinct and non-overlapping' },
@@ -106,7 +106,7 @@ export const CORE_PATTERNS: Array<{ id: string; content: PatternContent; example
     },
   },
   {
-    id: '00000000-0000-4000-8000-000000000012', examples: CORE_EXAMPLES[12]!,
+    id: '00000000-0000-4000-8000-000000000012', examples: CORE_EXAMPLES[12]!, defaultSelected: true,
     content: {
       name: 'Open-Ended Explanation', format: 'open_response',
       structure: { response_type: 'explanation', scope: 'specific idea, claim or relationship to explain', required_elements: 'state the expected reason, rule or evidence', detail: 'set an appropriate response boundary', evaluation_criteria: ['accuracy', 'clarity', 'support'] },

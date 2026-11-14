@@ -133,11 +133,11 @@ test('pattern enablement is metadata-only and controls only defaults for uniniti
     await host.dispose();
     host = await backend(temp.directory);
     assert.equal((await host.call<PatternsSnapshot>('patterns-snapshot')).patterns.find(entry => entry.id === pattern.id)?.enabled, false);
-    const [freshList] = host.nativeTools('teacher', 'fresh-session');
-    assert.ok(freshList);
     await host.call('pattern-enabled-set', { id: pattern.id, enabled: true });
     const freshPatterns = await host.call<Array<{ id: string; selected: boolean }>>('session-patterns', { sessionId: 'fresh-session' });
     assert.equal(freshPatterns.find(entry => entry.id === pattern.id)?.selected, true, 'enabled patterns default into sessions that have not initialized yet');
+    const [freshList] = host.nativeTools('teacher', 'fresh-session');
+    assert.ok(freshList);
     const freshDefinitions = await freshList.execute('fresh-list', {});
     assert.ok((freshDefinitions.details as Array<{ id: string }>).some(entry => entry.id === pattern.id));
     const enabledCatalog = await freshList.execute('catalog-enabled', { available: true });

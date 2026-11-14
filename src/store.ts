@@ -759,7 +759,7 @@ export class Store {
       if (!existing) {
         const record: PatternRecord = {
           version: 1, id: definition.id, coreSeedVersion: CORE_SEED_VERSION,
-          tags: ['Core'], enabled: true, archived: false,
+          tags: ['Core'], enabled: definition.defaultSelected ?? false, archived: false,
           versions: [{
             revision: 1, content: patternContent(definition.content),
             examples: structuredClone(definition.examples), exampleLimit: DEFAULT_PATTERN_EXAMPLE_LIMIT,
